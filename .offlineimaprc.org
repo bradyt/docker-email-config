@@ -1,0 +1,37 @@
+* ~/.offlineimaprc
+:PROPERTIES:
+:header-args: :tangle ".offlineimaprc"
+:END:
+
+#+begin_src conf
+[general]
+accounts = fastmail
+pythonfile = ~/.offlineimap.py
+
+[Account fastmail]
+localrepository = local_fastmail
+remoterepository = remote_fastmail
+
+[Repository local_fastmail]
+type = Maildir
+localfolders = ~/Maildir
+
+[Repository remote_fastmail]
+type = IMAP
+remotehost = imap.fastmail.com
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+remoteuser = username@fastmail.com
+remotepasseval = get_pass()
+#+end_src
+
+* ~/.offlineimap.py
+:PROPERTIES:
+:header-args: :tangle ".offlineimap.py"
+:END:
+
+#+begin_src python
+from subprocess import check_output
+
+def get_pass():
+    return check_output("cat password_imap", shell=True).strip("\n")
+#+end_src
