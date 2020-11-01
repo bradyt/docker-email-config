@@ -47,6 +47,9 @@ alternative_order text/plain text/html
 :END:
 
 #+begin_src emacs-lisp
+(setq frame-background-mode 'dark)
+(mapc 'frame-set-background-mode (frame-list))
+
 (setq user-full-name "Full Name")
 (setq user-mail-address "username@fastmail.com")
 
