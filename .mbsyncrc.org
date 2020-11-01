@@ -1,0 +1,57 @@
+* ~/.mbsyncrc
+:PROPERTIES:
+:header-args: :tangle ".mbsyncrc"
+:END:
+
+#+begin_src conf
+Sync All
+Create Slave
+Remove Slave
+Expunge Slave
+CopyArrivalDate yes
+
+IMAPStore fastmail-remote
+Host imap.fastmail.com
+Port 993
+User username@fastmail.com
+PassCmd "cat ~/password_imap"
+SSLType IMAPS
+
+MaildirStore fastmail-local
+Path ~/Maildir/
+Inbox ~/Maildir/INBOX/
+
+Channel fastmail-inbox
+Master :fastmail-remote:
+Slave :fastmail-local:
+
+Channel fastmail-sent
+Master :fastmail-remote:
+Slave :fastmail-local:
+Pattern Sent
+
+Channel fastmail-spam
+Master :fastmail-remote:
+Slave :fastmail-local:
+Pattern Spam
+
+Channel fastmail-trash
+Master :fastmail-remote:
+Slave :fastmail-local:
+Pattern Trash
+
+Channel fastmail-archive
+Master :fastmail-remote:
+Slave :fastmail-local:
+Pattern Archive
+
+Channel fastmail-drafts
+Master :fastmail-remote:
+Slave :fastmail-local:
+Pattern Drafts
+
+Channel fastmail-rest
+Master :fastmail-remote:
+Slave :fastmail-local:
+Pattern * !INBOX !Sent !Spam !Trash !Archive !Drafts
+#+end_src

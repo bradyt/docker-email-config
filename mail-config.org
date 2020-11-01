@@ -1,0 +1,117 @@
+* ~/.msmtprc
+:PROPERTIES:
+:header-args: :tangle ".msmtprc"
+:END:
+
+#+begin_src conf
+account fastmail
+host mail.messagingengine.com
+port 565
+tls on
+tls_starttls off
+auth on
+user username@fastmail.com
+passwordeval "cat /root/password_smtp"
+from username@fastmail.com
+
+account default : fastmail
+#+end_src
+
+* ~/.muttrc
+:PROPERTIES:
+:header-args: :tangle ".muttrc"
+:END:
+
+Emails from kingcounty.gov send right quotation marks in iso-8859-1,
+which renders as \222 in mutt. The fix seems to be found at
+https://gitlab.com/muttmua/mutt/-/wikis/MuttFaq/Charset, that is,
+=charset-hook ^iso-8859-1$ cp1252=.
+
+#+begin_src conf
+# set folder=~/Maildir/flatten
+set folder=~/Maildir
+set spoolfile=+INBOX
+
+charset-hook ^iso-8859-1$ cp1252
+
+set pager_index_lines=10
+
+set sort=reverse-date
+
+alternative_order text/plain text/html
+#+end_src
+
+* ~/.emacs
+:PROPERTIES:
+:header-args: :tangle ".emacs"
+:END:
+
+#+begin_src emacs-lisp
+(setq user-full-name "Full Name")
+(setq user-mail-address "username@fastmail.com")
+
+(setq sendmail-program "/usr/bin/msmtp")
+(setq send-mail-function 'smtpmail-send-it)
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+
+(setq gnus-select-method '(nnnil))
+(setq gnus-secondary-select-methods
+      '((nnmaildir "fastmail" (directory "~/Maildir"))))
+
+(setq mu4e-change-filenames-when-moving t)
+(setq mu4e-drafts-folder "/Drafts")
+(setq mu4e-refile-folder "/Archive")
+(setq mu4e-sent-folder "/Sent")
+(setq mu4e-trash-folder "/Trash")
+(setq mu4e-view-show-addresses t)
+(setq mu4e-sent-messages-behavior 'delete)
+(setq mu4e-get-mail-command "mbsync -a")
+
+(setq mu4e-maildir-shortcuts
+      '(("/INBOX"   . ?i)
+        ("/Sent"    . ?s)
+        ("/Spam"    . ?p)
+        ("/Trash"   . ?t)
+        ("/Archive" . ?a)
+        ("/Drafts"  . ?d)
+        ("/Notes"   . ?n)))
+
+(setq mu4e-headers-fields
+      '((:human-date     .  12)
+        (:flags          .   6)
+        (:from-or-to     .  22)
+        (:thread-subject . nil)))
+
+(setq mu4e-headers-time-format "%H:%M:%S")
+
+(setq mu4e-bookmarks
+      '(("flag:unread" "Unread messages" ?u)
+        ("flag:flagged" "Flagged messages" ?f)
+        ("date:today..now" "Today's messages" ?t)
+        ("date:7d..now" "Last 7 days" ?w)
+        ("mime:image/*" "Messages with images" ?p)))
+#+end_src
+
+* ~/.notmuch-config
+:PROPERTIES:
+:header-args: :tangle ".notmuch-config"
+:END:
+
+#+begin_src conf
+[database]
+path=/root/Maildir
+
+[user]
+name=Full Name
+primary_email=username@fastmail.com
+
+[new]
+tags=
+ignore=
+
+[search]
+exclude_tags=
+
+[maildir]
+synchronize_flags=true
+#+end_src
