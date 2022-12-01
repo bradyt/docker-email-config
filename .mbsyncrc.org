@@ -19,7 +19,7 @@ SSLType IMAPS
 
 MaildirStore fastmail-local
 Path ~/Maildir/
-Inbox ~/Maildir/INBOX/
+Inbox ~/Maildir/INBOX
 
 Channel fastmail-inbox
 Master :fastmail-remote:
