@@ -37,10 +37,11 @@ RUN mbsync --verbose --all # day: 1
 RUN mbsync --verbose --all # hour: 0
 RUN mbsync --verbose --all # minute: 0
 
+RUN mu init
+RUN mu index
+
 ADD mail-config.org /root/mail-config.org
 RUN emacs -batch ~/mail-config.org -f org-babel-tangle
-
-RUN mu index
 
 # CMD emacs -f mu4e
 
